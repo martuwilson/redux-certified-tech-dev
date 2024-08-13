@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAction, createSlice } from "@reduxjs/toolkit";
 
 
 export const pokemonSlice = createSlice({
@@ -26,3 +26,5 @@ export const pokemonSlice = createSlice({
 });
 
 export const { loadingPokemons, fetchPokemons, failedFetchPokemons } = pokemonSlice.actions;
+
+export const fetchingPokemons = createAction('pokemon/fetchingPokemon');

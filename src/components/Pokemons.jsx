@@ -1,17 +1,21 @@
 /* eslint-disable no-unused-vars */
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux"
-import { getPokemons } from "../thunk/thunk";
+//import { getPokemons } from "../thunk/thunk";
+import { fetchingPokemons } from "../reducers/pokemonSlice";
 
 const Pokemons = () => {
 
-    const {isLoading, pokemons = [], page, error} = useSelector(state => state.pokemons); // son los initialStates de pokemonSlice
-    console.log(pokemons,isLoading,error, page);
+    const [localPage, setLocalPage] = useState(0)
+
+    const {isLoading, pokemons = [], error} = useSelector(state => state.pokemons); // son los initialStates de pokemonSlice
+    console.log(pokemons,isLoading,error);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(getPokemons());
-    }, [dispatch]);
+        //dispatch(getPokemons()); //metodo thunk
+        dispatch(fetchingPokemons(localPage)); //metodo saga
+    }, [localPage, dispatch]);
 
   return (
     <div>
@@ -26,7 +30,7 @@ const Pokemons = () => {
             ))}
         </div>
         <button
-        onClick={() => dispatch(getPokemons(page))}
+        onClick={() => dispatch(() => setLocalPage(localPage + 1))}
         >Next page</button>
     </div>
   )

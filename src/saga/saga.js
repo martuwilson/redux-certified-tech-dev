@@ -1,8 +1,9 @@
+
 import { call, put, takeEvery } from "redux-saga/effects";
 import { failedFetchPokemons, fetchPokemons, loadingPokemons } from "../reducers/pokemonSlice";
 
 // Servicio para traer los datos de la API de pokemon
-const fetchPokemon = async () => {
+const fetchingPokemons = async (page = 0) => {
     const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=10&offset=${page * 10}`);
     const data = response.json();
 
@@ -17,7 +18,7 @@ function* getPokemons(action) {
         yield put(loadingPokemons());
 
         //obtener datos de la api
-        const data = yield call(fetchPokemon, page)
+        const data = yield call(fetchingPokemons, page)
 
         //guardar datos en la store
         yield put(fetchPokemons({pokemons: data.results, offset: page}));
@@ -29,7 +30,7 @@ function* getPokemons(action) {
 
 // saga principal para observar la accion de getPokemons
 function* watchGetPokemons() {
-    yield takeEvery('pokemon/fetchPokemons', getPokemons) // del 1er param --> pokemon es el name del slice y fetchPokemons es el nombre de la accion
+    yield takeEvery('pokemon/fetchingPokemon', getPokemons) // del 1er param --> pokemon es el name del slice y fetchPokemons es el nombre de la accion
 }
 
 export default watchGetPokemons;
